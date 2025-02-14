@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Date?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: pink;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .yes {
+            background-color: green;
+            color: white;
+        }
+        .no {
+            background-color: red;
+            color: white;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .gif-container {
+            margin-bottom: 10px;
+        }
+        .gif-container img {
+            width: 350px;
+            height: auto;
+        }
+        .image-pics {
+            width: 250px;
+            height: auto;
+        }
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+	<img src="https://i.pinimg.com/originals/95/7e/7f/957e7fa287dd818c0d6c7ef660fedcde.gif" alt="pics" class="image-pics">
+        <h1>Will you be my Valentine? ❤️</h1>
+        <button class="yes" onclick="acceptDate()">Yes</button>
+        <button class="no" onclick="askAgain()">No</button>
+    </div>
+    
+    <div id="popup" class="popup">
+        <div class="gif-container">
+            <img id="popup-gif" src="" alt="Cute GIF">
+        </div>
+        <p id="popup-text"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <canvas id="fireworks" class="fireworks"></canvas>
+    
+    <script>
+        function acceptDate() {
+            showPopup("Yay! See you on Valentine's Day! ❤️\nVenue: Choose where you want, 7 PM 🍽️🥂", "https://media2.giphy.com/media/kfRKF0iqA8jyDqq1nH/giphy.gif?cid=6c09b952s2c4e7dvaywb8b5x1yikr6tdflljbm0zu5ca9qdf&ep=v1_stickers_search&rid=giphy.gif&ct=s");
+            startFireworks();
+        }
+        function askAgain() {
+            showPopup("Are you sure? Think again! 💕", "https://i.pinimg.com/originals/f4/33/c5/f433c5b027a616b6abbb830de9604443.gif");
+        }
+        function showPopup(message, gifUrl) {
+            document.getElementById("popup-text").innerText = message;
+            document.getElementById("popup-gif").src = gifUrl;
+            document.getElementById("popup").style.display = "block";
+        }
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+        function startFireworks() {
+            const canvas = document.getElementById("fireworks");
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let particles = [];
+            function createParticle(x, y) {
+                return {
+                    x,
+                    y,
+                    size: Math.random() * 4 + 1,
+                    speedX: Math.random() * 6 - 3,
+                    speedY: Math.random() * 6 - 3,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                };
+            }
+            function animateFireworks() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    p.size *= 1;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                    if (p.size < 0.5) particles.splice(i, 1);
+                });
+                if (particles.length > 0) requestAnimationFrame(animateFireworks);
+            }
+            for (let i = 0; i < 100; i++) {
+                particles.push(createParticle(canvas.width / 2, canvas.height / 2));
+            }
+            animateFireworks();
+        }
+    </script>
+</body>
+</html>
+
+
